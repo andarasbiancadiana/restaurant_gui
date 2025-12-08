@@ -1,24 +1,45 @@
 package restaurant;
 
-import java.util.ArrayList;
-import java.util.List;
+import javafx. beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
+import java.util. ArrayList;
+import java.util. List;
 
 public final class Pizza extends Food {
-    private String dough;
-    private String sauce;
-    private List<String> toppings;
+    private final StringProperty dough;
+    private final StringProperty sauce;
+    private final ObservableList<String> toppings;
 
     private Pizza(Builder builder) {
         super(builder.name, builder.price, true, builder.weight);
-        this.dough = builder.dough;
-        this.sauce = builder.sauce;
-        this.toppings = builder.toppings;
+        this.dough = new SimpleStringProperty(builder.dough);
+        this.sauce = new SimpleStringProperty(builder.sauce);
+        this.toppings = FXCollections.observableArrayList(builder.toppings);
     }
+
+    // Property getters
+    public StringProperty doughProperty() { return dough; }
+    public StringProperty sauceProperty() { return sauce; }
+    public ObservableList<String> toppingsProperty() { return toppings; }
+
+    // Standard getters
+    public String getDough() { return dough.get(); }
+    public String getSauce() { return sauce.get(); }
+    public List<String> getToppings() { return new ArrayList<>(toppings); }
+
+    // Standard setters
+    public void setDough(String dough) { this.dough.set(dough); }
+    public void setSauce(String sauce) { this. sauce.set(sauce); }
+    public void addTopping(String topping) { this.toppings.add(topping); }
+    public void removeTopping(String topping) { this.toppings.remove(topping); }
+    public void clearToppings() { this.toppings.clear(); }
 
     @Override
     public void displayInfo() {
-        System.out.println("> " + name + " - " + price + " RON - Gramaj: " + weight + "g");
-        System.out.println("  Blat: " + dough + ", Sos: " + sauce);
+        System.out. println("> " + getName() + " - " + getPrice() + " RON - Gramaj: " + getWeight() + "g");
+        System. out.println("  Blat: " + getDough() + ", Sos: " + getSauce());
         if (!toppings.isEmpty()) {
             System.out.print("  Topping-uri: ");
             for (int i = 0; i < toppings.size(); i++) {
@@ -29,7 +50,13 @@ public final class Pizza extends Food {
         }
     }
 
+    @Override
+    public String getCategory() {
+        return "Pizza";
+    }
+
     public static class Builder {
+        private int id;
         private String name;
         private double price;
         private int weight;
@@ -38,9 +65,22 @@ public final class Pizza extends Food {
         private List<String> toppings = new ArrayList<>();
 
         public Builder(String name, double price, int weight) {
+            this.id = 0; // Default ID, will be set by database
             this.name = name;
             this.price = price;
             this.weight = weight;
+        }
+
+        public Builder(int id, String name, double price, int weight) {
+            this.id = id;
+            this.name = name;
+            this.price = price;
+            this.weight = weight;
+        }
+
+        public Builder id(int id) {
+            this.id = id;
+            return this;
         }
 
         public Builder dough(String dough) {
@@ -55,6 +95,11 @@ public final class Pizza extends Food {
 
         public Builder addTopping(String topping) {
             toppings.add(topping);
+            return this;
+        }
+
+        public Builder toppings(List<String> toppings) {
+            this. toppings = new ArrayList<>(toppings);
             return this;
         }
 
