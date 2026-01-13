@@ -1,5 +1,7 @@
 package restaurant;
 
+import restaurant.model.Order;
+
 import java.util.*;
 
 public class Main {
@@ -13,7 +15,7 @@ public class Main {
         List<Order> orders = new ArrayList<>();
         List<SpecialOffer> offers = new ArrayList<>();
 
-        menu.addCategory(Category.FEL_PRINCIPAL, List.of(
+        /*menu.addCategory(Category.FEL_PRINCIPAL, List.of(
                 new Food("Pizza Margherita", 45.0, true, 450),
                 new Food("Paste Carbonara", 52.5, false, 400)
         ));
@@ -22,6 +24,7 @@ public class Main {
                 new Drink("Limonada", 15.0, true, 400),
                 new Drink("Apa Plata", 8.0, true, 500)
         ));
+         */
 
         offers.add(SpecialOffer.PIZZA_DRINK_FREE);
         offers.add(SpecialOffer.VALENTINES_DAY);

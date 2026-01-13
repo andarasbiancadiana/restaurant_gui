@@ -1,9 +1,10 @@
+/*
 package restaurant;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Order {
+public class OldOrder {
     private static final int TVA;
     static {
         int t = 9;
@@ -20,7 +21,7 @@ public class Order {
     private Map<Product, Integer> products;
     private double currentDiscount = 0;
 
-    public Order() {
+    public OldOrder() {
         products = new HashMap<>();
     }
 
@@ -58,3 +59,5 @@ public class Order {
         return products.isEmpty();
     }
 }
+
+ */

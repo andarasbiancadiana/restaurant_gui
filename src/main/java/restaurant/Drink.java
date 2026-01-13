@@ -1,36 +1,49 @@
 package restaurant;
 
-import javafx. beans.property.*;
+import javafx.beans.property.*;
+import jakarta.persistence.*;
 
+@Entity
+@DiscriminatorValue("DRINK")
 public final class Drink extends Product {
-    private final IntegerProperty volume;
 
-    public Drink(String name, double price, boolean vegetarian, int volume) {
-        super(name, price, vegetarian);
-        this.volume = new SimpleIntegerProperty(volume);
+    @Column(name = "volume")
+    private int volumeSimple;
+
+    @Transient
+    protected final transient IntegerProperty volume = new SimpleIntegerProperty();
+
+    protected Drink() {
+        super();
     }
 
-    // Property getter
+    public Drink(String name, double price, boolean vegetarian, Category category, int volume) {
+        super(name, price, vegetarian, category);
+        this.volumeSimple = volume;
+        syncToProperties();
+    }
+
+    @Override
+    protected void syncToProperties() {
+        super.syncToProperties();
+        this.volume.set(volumeSimple);
+    }
+
+    @Override
+    public void syncFromProperties() {
+        super.syncFromProperties();
+        this.volumeSimple = this.volume.get();
+    }
+
     public IntegerProperty volumeProperty() { return volume; }
+    public int getVolume() { return volume.get(); }
 
-    // Standard getter
-    public int getVolume() { return volume. get(); }
-
-    // Standard setter
-    public void setVolume(int volume) { this.volume. set(volume); }
-
-    @Override
-    public void displayInfo() {
-        System.out.println("> " + getName() + " - " + getPrice() + " RON - Volum: " + getVolume() + "ml");
+    public void setVolume(int volume) {
+        this.volumeSimple = volume;
+        this.volume.set(volume);
     }
 
-    @Override
-    public String getWeightVolume() {
-        return getVolume() + "ml";
-    }
-
-    @Override
-    public String getCategory() {
-        return "Bautura";
-    }
+    @Override public String getWeightVolume() { return getVolume() + "ml"; }
+    @Override public String getCategory() { return "Bautura"; }
+    @Override public void displayInfo() { }
 }
